@@ -20,13 +20,11 @@ public:
     }
 
     void add( const std::shared_ptr< Unit >& unit, Flags flags ) {
-        int accessModifier = PRIVATE;
-
         if ( flags < ACCESS_MODIFIERS.size() ) {
-            accessModifier = flags;
+            m_fields[ flags ].push_back( unit );
         }
 
-        m_fields[ accessModifier ].push_back( unit );
+
     }
 
     std::string compile( unsigned int level = 0 ) const
