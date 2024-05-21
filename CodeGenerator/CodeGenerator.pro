@@ -8,6 +8,7 @@ CONFIG += c++17 cmdline
 
 SOURCES += \
         PlusPlusUnit.cpp \
+        SharpUnit.cpp \
         main.cpp
 
 # Default rules for deployment.
@@ -17,4 +18,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     PlusPlusUnit.h \
+    SharpUnit.h \
     Unit.h
