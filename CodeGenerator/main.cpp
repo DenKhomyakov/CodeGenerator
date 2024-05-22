@@ -1,5 +1,6 @@
 #include "PlusPlusUnit.h"
 #include "SharpUnit.h"
+#include "JavaUnit.h"
 
 using namespace std;
 
@@ -29,7 +30,7 @@ std::string generateProgram() {
 
     return myClass.compile();
 }
-*/
+
 
 std::string generateProgram() {
     SharpClassUnit myClass( SharpUnit::PRIVATE, "SharpClass" );
@@ -53,6 +54,32 @@ std::string generateProgram() {
 
     method->add( std::make_shared< SharpPrintOperatorUnit >( R"(Hello, Sharp!\n)" ) );
     myClass.add( method, SharpUnit::PROTECTED );
+
+    return myClass.compile();
+}
+*/
+
+std::string generateProgram() {
+    JavaClassUnit myClass(JavaClassUnit::PRIVATE, "JavaClass" );
+
+    myClass.add(
+        std::make_shared <JavaMethodUnit >( "testFunc1", "void", JavaMethodUnit::FINAL | JavaMethodUnit::STATIC ),
+        JavaUnit::PUBLIC
+        );
+
+    myClass.add(
+        std::make_shared< JavaMethodUnit >( "testFunc2", "void", JavaMethodUnit::ABSTRACT ),
+        JavaUnit::PRIVATE
+        );
+
+    myClass.add(
+        std::make_shared< JavaMethodUnit >( "testFunc3", "void", JavaMethodUnit::VOLATILE),
+        JavaUnit::PROTECTED
+        );
+
+    auto method = std::make_shared< JavaMethodUnit >( "testFunc4", "void", JavaMethodUnit::STATIC );
+    method->add( std::make_shared< JavaPrintOperatorUnit >( R"(Hello, Java!\n)" ) );
+    myClass.add( method, JavaMethodUnit::PROTECTED );
 
     return myClass.compile();
 }
