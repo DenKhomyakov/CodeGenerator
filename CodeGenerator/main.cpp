@@ -1,92 +1,24 @@
-#include "PlusPlusUnit.h"
-#include "SharpUnit.h"
-#include "JavaUnit.h"
-
-using namespace std;
-
-/*
-std::string generateProgram() {
-    PlusPlusClassUnit myClass(PlusPlusClassUnit::PRIVATE, "PlusPlusClass" );
-
-    myClass.add(
-        std::make_shared< PlusPlusMethodUnit >( "testFunc1", "void", 0 ),
-        PlusPlusClassUnit::PUBLIC
-        );
-
-    myClass.add(
-        std::make_shared< PlusPlusMethodUnit >( "testFunc2", "void", PlusPlusMethodUnit::STATIC ),
-        PlusPlusClassUnit::PRIVATE
-        );
-
-    myClass.add(
-        std::make_shared< PlusPlusMethodUnit >( "testFunc3", "void", PlusPlusMethodUnit::VIRTUAL | PlusPlusMethodUnit::CONST ),
-        PlusPlusClassUnit::PUBLIC
-        );
-
-    auto method = std::make_shared< PlusPlusMethodUnit >( "testFunc4", "void", PlusPlusMethodUnit::STATIC );
-
-    method->add( std::make_shared< PlusPlusPrintOperatorUnit >( R"(Hello, Plus!\n)" ) );
-    myClass.add( method, PlusPlusClassUnit::PROTECTED );
-
-    return myClass.compile();
-}
-
-
-std::string generateProgram() {
-    SharpClassUnit myClass( SharpUnit::PRIVATE, "SharpClass" );
-
-    myClass.add(
-        std::make_shared< SharpMethodUnit >( "testFunc1", "void", SharpUnit::CONST),
-        SharpUnit::PUBLIC
-        );
-
-    myClass.add(
-        std::make_shared< SharpMethodUnit >( "testFunc2", "void", SharpUnit::STATIC ),
-        SharpUnit::PRIVATE
-        );
-
-    myClass.add(
-        std::make_shared< SharpMethodUnit >( "testFunc3", "void", SharpUnit::CONST),
-        SharpUnit::PUBLIC
-        );
-
-    auto method = std::make_shared< SharpMethodUnit >( "testFunc4", "void", SharpUnit::STATIC );
-
-    method->add( std::make_shared< SharpPrintOperatorUnit >( R"(Hello, Sharp!\n)" ) );
-    myClass.add( method, SharpUnit::PROTECTED );
-
-    return myClass.compile();
-}
-*/
-
-std::string generateProgram() {
-    JavaClassUnit myClass(JavaClassUnit::PRIVATE, "JavaClass" );
-
-    myClass.add(
-        std::make_shared <JavaMethodUnit >( "testFunc1", "void", JavaMethodUnit::FINAL | JavaMethodUnit::STATIC ),
-        JavaUnit::PUBLIC
-        );
-
-    myClass.add(
-        std::make_shared< JavaMethodUnit >( "testFunc2", "void", JavaMethodUnit::ABSTRACT ),
-        JavaUnit::PRIVATE
-        );
-
-    myClass.add(
-        std::make_shared< JavaMethodUnit >( "testFunc3", "void", JavaMethodUnit::VOLATILE),
-        JavaUnit::PROTECTED
-        );
-
-    auto method = std::make_shared< JavaMethodUnit >( "testFunc4", "void", JavaMethodUnit::STATIC );
-    method->add( std::make_shared< JavaPrintOperatorUnit >( R"(Hello, Java!\n)" ) );
-    myClass.add( method, JavaMethodUnit::PROTECTED );
-
-    return myClass.compile();
-}
+#include <Factory.h>
+#include <iostream>
 
 int main() {
-    std::string generatedProgram = generateProgram();
-    std::cout << generatedProgram << std::endl;
+    AbstractFactory* factory;
 
+    factory = new PlusPlusFactory;
+    std::cout << factory->generateProgram();
+
+    std::cout << '\n' ;
+    std::cout << '\n' ;
+
+    factory = new SharpFactory;
+    std::cout << factory->generateProgram();
+
+    std::cout << '\n' ;
+    std::cout << '\n' ;
+
+    factory = new JavaFactory;
+    std::cout << factory->generateProgram();
+
+    delete factory;
     return 0;
 }
