@@ -58,21 +58,21 @@ std::string SharpFactory::generateProgram() {
     SharpClassUnit myClass( SharpUnit::PRIVATE, "SharpClass" );
 
     myClass.add(
-        std::make_shared< SharpMethodUnit >( "testFunc1", "void", SharpUnit::CONST),
+        std::make_shared< SharpMethodUnit >( "testFunc1", "void", SharpMethodUnit::CONST),
         SharpUnit::PUBLIC
         );
 
     myClass.add(
-        std::make_shared< SharpMethodUnit >( "testFunc2", "void", SharpUnit::STATIC ),
+        std::make_shared< SharpMethodUnit >( "testFunc2", "void", SharpMethodUnit::STATIC ),
         SharpUnit::PRIVATE
         );
 
     myClass.add(
-        std::make_shared< SharpMethodUnit >( "testFunc3", "void", SharpUnit::CONST),
+        std::make_shared< SharpMethodUnit >( "testFunc3", "void", SharpMethodUnit::CONST),
         SharpUnit::PUBLIC
         );
 
-    auto method = std::make_shared< SharpMethodUnit >( "testFunc4", "void", SharpUnit::STATIC );
+    auto method = std::make_shared< SharpMethodUnit >( "testFunc4", "void", SharpMethodUnit::STATIC );
 
     method->add( std::make_shared< SharpPrintOperatorUnit >( R"(Hello, Sharp!\n)" ) );
     myClass.add( method, SharpUnit::PROTECTED );

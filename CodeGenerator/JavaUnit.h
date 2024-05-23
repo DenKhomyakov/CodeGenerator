@@ -26,8 +26,8 @@ class JavaClassUnit : public JavaUnit {
 public:
     explicit JavaClassUnit(Flags flag,const std::string& name);
 
-    virtual void add( const std::shared_ptr< Unit >& , Flags ) override;
-    virtual std::string compile( unsigned int level = 0 ) const  override;
+    void add( const std::shared_ptr< Unit >& unit, Flags flags);
+    std::string compile( unsigned int level = 0 ) const;
 
 private:
     using Fields = std::vector< std::shared_ptr< Unit > >;
@@ -43,17 +43,18 @@ public:
         VOLATILE = 1 << 4
     };
 
-    JavaMethodUnit(const std::string& name, const std::string& returnType, Flags flags);
+    JavaMethodUnit(const std::string& name, const std::string& returnType, Unit::Flags flags);
 
     void add( const std::shared_ptr< Unit >& , Flags = 0 );
     std::string compile( unsigned int level = 0 ) const;
 
 private:
     std::string m_returnType;
+    Flags m_flags;
     std::vector< std::shared_ptr< Unit > > m_body;
 };
 
-class JavaPrintOperatorUnit : public Unit {
+class JavaPrintOperatorUnit : public JavaUnit {
 public:
     explicit JavaPrintOperatorUnit(const std::string& text);
 

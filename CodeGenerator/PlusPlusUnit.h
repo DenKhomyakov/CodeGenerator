@@ -51,7 +51,7 @@ private:
     std::vector< std::shared_ptr< Unit > > m_body;
 };
 
-class PlusPlusPrintOperatorUnit : public Unit {
+class PlusPlusPrintOperatorUnit : public PlusPlusUnit {
 public:
     explicit PlusPlusPrintOperatorUnit(const std::string &text);
 

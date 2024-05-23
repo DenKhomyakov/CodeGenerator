@@ -14,10 +14,7 @@ public:
         INTERNAL,
         PROTECTEDINTERNAL,
         ABSTRACT,
-        SEALED,
-        STATIC,
-        CONST,
-        NOMODIFIER
+        SEALED
     };
 
     static const std::vector< std::string > ACCESS_MODIFIERS_UNIT;
@@ -34,7 +31,7 @@ class SharpClassUnit : public SharpUnit {
 public:
     explicit SharpClassUnit(Flags flag, const std::string& name);
 
-    void add( const std::shared_ptr< Unit >& , Flags );
+    void add( const std::shared_ptr< Unit >& unit, Flags flags);
     std::string compile( unsigned int level = 0 ) const;
 
 private:
@@ -44,17 +41,24 @@ private:
 
 class SharpMethodUnit : public SharpUnit {
 public:
-    SharpMethodUnit(const std::string& name, const std::string& returnType, Flags flags);
+    enum Modifier {
+        STATIC = 1,
+        CONST = 1 << 1,
+        VIRTUAL = 1 << 2
+    };
+
+    SharpMethodUnit(const std::string& name, const std::string& returnType, Unit::Flags flags);
 
     void add( const std::shared_ptr< Unit >& , Flags = 0 ) ;
     std::string compile( unsigned int level = 0 ) const ;
 
 private:
     std::string m_returnType;
+    Flags m_flags;
     std::vector< std::shared_ptr< Unit > > m_body;
 };
 
-class SharpPrintOperatorUnit : public Unit {
+class SharpPrintOperatorUnit : public SharpUnit {
 public:
     explicit SharpPrintOperatorUnit(const std::string& text);
 

@@ -84,48 +84,8 @@ std::string PlusPlusMethodUnit::compile( unsigned int level ) const {
 
 /* PRINT OPERATOR UNIT */
 
-PlusPlusPrintOperatorUnit::PlusPlusPrintOperatorUnit(const std::string &text) : m_text(text) {}
+PlusPlusPrintOperatorUnit::PlusPlusPrintOperatorUnit(const std::string &text) : PlusPlusUnit(0, ""), m_text(text) {}
 
 std::string PlusPlusPrintOperatorUnit::compile(unsigned int level) const {
     return generateShift(level) + "printf( \"" + m_text + "\" );\n";
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

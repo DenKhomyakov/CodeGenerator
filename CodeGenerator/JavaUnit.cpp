@@ -8,7 +8,7 @@ JavaUnit::JavaUnit(Flags mod, const std::string &name) : modifier(mod), m_name(n
     }
 }
 
-const std::vector< std::string > JavaUnit::ACCESS_MODIFIERS_UNIT = {"public", "protected", "private", ""};
+const std::vector< std::string > JavaUnit::ACCESS_MODIFIERS_UNIT = { "public", "protected", "private", "default" };
 
 /* CLASS UNIT */
 
@@ -50,7 +50,7 @@ std::string JavaClassUnit::compile(unsigned int level) const {
 
 /* METHOD UNIT */
 
-JavaMethodUnit::JavaMethodUnit(const std::string &name, const std::string &returnType,  Unit::Flags flags ) : JavaUnit(flags, name),m_returnType(returnType) {}
+JavaMethodUnit::JavaMethodUnit(const std::string &name, const std::string &returnType,  Unit::Flags flags ) : JavaUnit(flags, name), m_returnType(returnType) {}
 
 std::string JavaMethodUnit::compile(unsigned int level) const {
     std::string result = generateShift( level );
@@ -83,7 +83,7 @@ void JavaMethodUnit::add(const std::shared_ptr<Unit> & unit, Unit::Flags) {
 
 /* PRINT OPERATOR UNIT */
 
-JavaPrintOperatorUnit::JavaPrintOperatorUnit(const std::string &text) : m_text(text) {}
+JavaPrintOperatorUnit::JavaPrintOperatorUnit(const std::string &text) : JavaUnit(0, ""), m_text(text) {}
 
 std::string JavaPrintOperatorUnit::compile(unsigned int level) const {
     return generateShift(level) + "System.out.println( \"" + m_text + "\" );\n";
