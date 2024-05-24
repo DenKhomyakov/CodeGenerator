@@ -40,8 +40,6 @@ std::string SharpClassUnit::compile(unsigned int level) const {
             result += ACCESS_MODIFIERS_UNIT[ i ];
             result += f->compile( level + 1 );
         }
-
-        //result += "\n";
     }
 
     result += generateShift( level ) + "};\n";
@@ -57,17 +55,25 @@ void SharpMethodUnit::add(const std::shared_ptr<Unit> & unit, Unit::Flags) {
 }
 
 std::string SharpMethodUnit::compile(unsigned int level) const {
-    std::string result = generateShift( level );
-    result += ACCESS_MODIFIERS_UNIT[modifier] + " ";
-    result += m_returnType + " ";
-    result += m_name + "()";
-    result += " {\n";
+    std::string result = generateShift(level);
 
-    for( const auto& b : m_body ) {
-        result += b->compile( level + 1 );
+    if (m_flags & STATIC) {
+        result += "static ";
     }
 
-    result += generateShift( level ) + "}\n";
+    result += m_returnType + " " + m_name + "()";
+
+    if (m_flags & CONST) {
+        result += " const";
+    }
+
+    result += " {\n";
+
+    for (const auto& b : m_body) {
+        result += b->compile(level + 1);
+    }
+
+    result += generateShift(level) + "}\n";
     return result;
 }
 
