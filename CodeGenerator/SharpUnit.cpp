@@ -16,7 +16,7 @@ void SharpClassUnit::add(const std::shared_ptr<Unit> & unit, Unit::Flags flags) 
         accessModifier = flags;
     }
 
-    m_fields[ flags ].push_back( unit );
+    m_fields[ accessModifier ].push_back( unit );
 }
 
 std::string SharpClassUnit::compile(unsigned int level) const {
