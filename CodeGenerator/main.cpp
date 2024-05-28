@@ -9,23 +9,10 @@ std::string generateProgram(AbstractFactory* factory, const std::string name) {
 
     auto method = factory->createMethod("testFunc4", "void", 0);
     method->add(factory->createPrintOperator(R"(Hello, Class!\n)"), ClassUnit::PROTECTED);
+    myClass->add(method, ClassUnit::PROTECTED);
 
     return myClass->compile();
 }
-
-/*
-std::string generateProgram(AbstractFactory* factory) {
-    std::shared_ptr<ClassUnit> myClass = factory->createClass(PlusPlusClassUnit::PRIVATE, "Test");
-    myClass->add(factory->createMethod("testFunc1", "void", 0), PlusPlusClassUnit::PUBLIC);
-    myClass->add(factory->createMethod("testFunc2", "void", PlusPlusMethodUnit::STATIC), PlusPlusClassUnit::PRIVATE);
-    myClass->add(factory->createMethod("testFunc3", "void", PlusPlusMethodUnit::VIRTUAL), PlusPlusClassUnit::PUBLIC);
-
-    auto method = factory->createMethod("testFunc4", "void", 0);
-    method->add(factory->createPrintOperator(R"(Hello, Class!\n)"), PlusPlusClassUnit::PROTECTED);
-
-    return myClass->compile();
-}
-*/
 
 int main() {
     AbstractFactory* factory;

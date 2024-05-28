@@ -10,7 +10,7 @@ SharpClassUnit::SharpClassUnit(Flags flag ,const std::string& name) : ClassUnit(
 }
 
 void SharpClassUnit::add(const std::shared_ptr<Unit> & unit, Unit::Flags flags) {
-    int accessModifier = ClassUnit::INTERNAL;
+    int accessModifier = flags;
 
     if( flags != 0 && flags >= ACCESS_MODIFIERS_UNIT.size() ) {
         accessModifier = flags;
