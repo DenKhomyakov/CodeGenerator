@@ -34,48 +34,48 @@ std::string JavaFactory::generateProgram() {
 
     myClass.add(
         std::make_shared <JavaMethodUnit >( "testFunc1", "void", JavaMethodUnit::FINAL | JavaMethodUnit::STATIC ),
-        JavaUnit::PUBLIC
+        JavaClassUnit::PUBLIC
         );
 
     myClass.add(
         std::make_shared< JavaMethodUnit >( "testFunc2", "void", JavaMethodUnit::ABSTRACT ),
-        JavaUnit::PRIVATE
+        JavaClassUnit::PRIVATE
         );
 
     myClass.add(
         std::make_shared< JavaMethodUnit >( "testFunc3", "void", JavaMethodUnit::VOLATILE),
-        JavaUnit::PUBLIC
+        JavaClassUnit::PUBLIC
         );
 
     auto method = std::make_shared< JavaMethodUnit >( "testFunc4", "void", JavaMethodUnit::STATIC );
     method->add( std::make_shared< JavaPrintOperatorUnit >( R"(Hello, Java!\n)" ) );
-    myClass.add( method, JavaMethodUnit::PROTECTED );
+    myClass.add( method, JavaClassUnit::PROTECTED );
 
     return myClass.compile();
 }
 
 std::string SharpFactory::generateProgram() {
-    SharpClassUnit myClass( SharpUnit::PUBLIC, "SharpClass" );
+    SharpClassUnit myClass( SharpClassUnit::PUBLIC, "SharpClass" );
 
     myClass.add(
         std::make_shared< SharpMethodUnit >( "testFunc1", "void", SharpMethodUnit::CONST),
-        SharpUnit::PUBLIC
+        SharpClassUnit::PUBLIC
         );
 
     myClass.add(
         std::make_shared< SharpMethodUnit >( "testFunc2", "void", SharpMethodUnit::STATIC ),
-        SharpUnit::PRIVATE
+        SharpClassUnit::PRIVATE
         );
 
     myClass.add(
         std::make_shared< SharpMethodUnit >( "testFunc3", "void", SharpMethodUnit::CONST),
-        SharpUnit::PUBLIC
+        SharpClassUnit::PUBLIC
         );
 
     auto method = std::make_shared< SharpMethodUnit >( "testFunc4", "void", SharpMethodUnit::STATIC );
 
     method->add( std::make_shared< SharpPrintOperatorUnit >( R"(Hello, Sharp!\n)" ) );
-    myClass.add( method, SharpUnit::PROTECTED );
+    myClass.add( method, SharpClassUnit::PROTECTED );
 
     return myClass.compile();
 }

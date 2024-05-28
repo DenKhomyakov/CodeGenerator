@@ -11,6 +11,7 @@ SOURCES += \
         JavaUnit.cpp \
         PlusPlusUnit.cpp \
         SharpUnit.cpp \
+        Unit.cpp \
         main.cpp
 
 # Default rules for deployment.

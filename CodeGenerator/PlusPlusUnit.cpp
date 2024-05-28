@@ -1,23 +1,15 @@
 #include "PlusPlusUnit.h"
 
-/* UNIT */
+/* CLASS UNIT */
 
-PlusPlusUnit::PlusPlusUnit(Flags mod, const std::string& name) : modifier(mod), m_name(name) {
-    if(modifier != 0 && modifier >= ACCESS_MODIFIERS_UNIT.size()) {
-        modifier = AccessModifierUnit::PROTECTED;
+PlusPlusClassUnit::PlusPlusClassUnit( Flags flag, const std::string &name ) : ClassUnit(flag, name) {
+    if (flag != 0 && flag >= ACCESS_MODIFIERS_UNIT.size()) {
+        modifier = AccessModifierUnit::PRIVATE;
     }
 }
 
-const std::vector< std::string > PlusPlusUnit::ACCESS_MODIFIERS_UNIT = { "public", "protected", "private" };
-
-/* CLASS UNIT */
-
-PlusPlusClassUnit::PlusPlusClassUnit( Flags flag, const std::string &name ) : PlusPlusUnit(flag, name) {
-    m_fields.resize( ACCESS_MODIFIERS_UNIT.size() );
-}
-
 void PlusPlusClassUnit::add( const std::shared_ptr< Unit >& unit, Flags flags ) {
-    int accessModifier = PRIVATE;
+    int accessModifier = ClassUnit::PRIVATE;
 
     if( flags < ACCESS_MODIFIERS_UNIT.size() ) {
         accessModifier = flags;
@@ -29,18 +21,22 @@ void PlusPlusClassUnit::add( const std::shared_ptr< Unit >& unit, Flags flags ) 
 std::string PlusPlusClassUnit::compile( unsigned int level ) const {
     std::string result = generateShift( level ) + "class " + m_name + " {\n";
 
-    for( size_t i = 0; i < ACCESS_MODIFIERS_UNIT.size(); ++i ) {
-        if( m_fields[ i ].empty() ) {
+    auto it = m_fields.begin();
+
+    while( it != m_fields.end()) {
+        if( it->second.empty()) {
             continue;
         }
 
-        result += ACCESS_MODIFIERS_UNIT[ i ] + ":\n";
+        result += ACCESS_MODIFIERS_UNIT[ it->first ] + ":\n";
 
-        for( const auto& f : m_fields[ i ] ) {
+        for( const auto& f : it->second ) {
+
             result += f->compile( level + 1 );
         }
 
         result += "\n";
+        ++it;
     }
 
     result += generateShift( level ) + "};\n";
@@ -50,7 +46,7 @@ std::string PlusPlusClassUnit::compile( unsigned int level ) const {
 /* METHOD UNIT */
 
 PlusPlusMethodUnit::PlusPlusMethodUnit( const std::string &name, const std::string &returnType,  Unit::Flags flags ) :
-   PlusPlusUnit(flags, name), m_returnType( returnType ) {}
+    MethodUnit(name, returnType, flags) {}
 
 void PlusPlusMethodUnit::add( const std::shared_ptr< Unit >& unit, Flags ) {
     m_body.push_back( unit );
@@ -63,15 +59,12 @@ std::string PlusPlusMethodUnit::compile( unsigned int level ) const {
         result += "static ";
     } else if( m_flags & VIRTUAL ) {
         result += "virtual ";
+    } else if( m_flags & CONST ) {
+        result += " const";
     }
 
     result += m_returnType + " ";
     result += m_name + "()";
-
-    if( m_flags & CONST ) {
-        result += " const";
-    }
-
     result += " {\n";
 
     for( const auto& b : m_body ) {
@@ -84,7 +77,7 @@ std::string PlusPlusMethodUnit::compile( unsigned int level ) const {
 
 /* PRINT OPERATOR UNIT */
 
-PlusPlusPrintOperatorUnit::PlusPlusPrintOperatorUnit(const std::string &text) : PlusPlusUnit(0, ""), m_text(text) {}
+PlusPlusPrintOperatorUnit::PlusPlusPrintOperatorUnit(const std::string &text) : PrintOperatorUnit(text) {}
 
 std::string PlusPlusPrintOperatorUnit::compile(unsigned int level) const {
     return generateShift(level) + "printf( \"" + m_text + "\" );\n";
