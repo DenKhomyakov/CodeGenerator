@@ -1,45 +1,37 @@
 #include "SharpUnit.h"
 #include <string_view>
 
-/* UNIT */
+/* CLASS UNIT */
 
-SharpUnit::SharpUnit(Flags flag, const std::string &name) : modifier(flag), m_name(name) {
-    if(flag != 0 && flag >= ACCESS_MODIFIERS_UNIT.size()) {
+SharpClassUnit::SharpClassUnit(Flags flag ,const std::string& name) : ClassUnit(flag, name) {
+    if (flag != 0 && flag >= ACCESS_MODIFIERS_UNIT.size()) {
         modifier = AccessModifierUnit::PRIVATE;
     }
 }
 
-const std::vector< std::string > SharpUnit::ACCESS_MODIFIERS_UNIT = { "public", "protected", "private", "private protected", "file",
-                                                                   "internal", "protected internal", "abstract", "sealed" };
-
-
-/* CLASS UNIT */
-
-SharpClassUnit::SharpClassUnit(Flags flag ,const std::string& name) : SharpUnit(flag,name) {
-    m_fields.resize(ACCESS_MODIFIERS_UNIT.size());
-}
-
 void SharpClassUnit::add(const std::shared_ptr<Unit> & unit, Unit::Flags flags) {
+    int accessModifier = flags;
+
     if( flags != 0 && flags >= ACCESS_MODIFIERS_UNIT.size() ) {
-        flags = AccessModifierUnit::PRIVATE;
+        accessModifier = flags;
     }
 
-    m_fields[ flags ].push_back( unit );
+    m_fields[ accessModifier ].push_back( unit );
 }
 
 std::string SharpClassUnit::compile(unsigned int level) const {
     std::string_view str(ACCESS_MODIFIERS_UNIT[static_cast<int>(modifier)]);
     std::string result = generateShift( level ) + str.data() + " class " + m_name + " {\n";
 
-    for( size_t i = 0; i < ACCESS_MODIFIERS_UNIT.size(); ++i ) {
-        if( m_fields[ i ].empty() ) {
-            continue;
-        }
+    auto it = m_fields.begin();
 
-        for( const auto& f : m_fields[ i ] ) {
-            result += ACCESS_MODIFIERS_UNIT[ i ];
+    while( it != m_fields.end()) {
+        for( const auto& f : it->second ) {
+            result += ACCESS_MODIFIERS_UNIT[ it->first ];
             result += f->compile( level + 1 );
         }
+
+        ++it;
     }
 
     result += generateShift( level ) + "};\n";
@@ -48,7 +40,7 @@ std::string SharpClassUnit::compile(unsigned int level) const {
 
 /* METHOD UNIT */
 
-SharpMethodUnit::SharpMethodUnit(const std::string& name, const std::string& returnType, Unit::Flags flags) : SharpUnit(flags,name), m_returnType(returnType) {}
+SharpMethodUnit::SharpMethodUnit(const std::string& name, const std::string& returnType, Unit::Flags flags) : MethodUnit(name, returnType, flags) {}
 
 void SharpMethodUnit::add(const std::shared_ptr<Unit> & unit, Unit::Flags) {
     m_body.push_back(unit);
@@ -59,14 +51,12 @@ std::string SharpMethodUnit::compile(unsigned int level) const {
 
     if (m_flags & STATIC) {
         result += "static ";
-    }
-
-    result += m_returnType + " " + m_name + "()";
-
-    if (m_flags & CONST) {
+    } else if (m_flags & CONST) {
         result += " const";
     }
 
+    result += m_returnType + " ";
+    result += m_name + "()";
     result += " {\n";
 
     for (const auto& b : m_body) {
@@ -79,7 +69,7 @@ std::string SharpMethodUnit::compile(unsigned int level) const {
 
 /* PRINT OPERATOR UNIT */
 
-SharpPrintOperatorUnit::SharpPrintOperatorUnit(const std::string &text) : SharpUnit(0, ""), m_text(text) {}
+SharpPrintOperatorUnit::SharpPrintOperatorUnit(const std::string &text) : PrintOperatorUnit(text) {}
 
 std::string SharpPrintOperatorUnit::compile(unsigned int level) const {
     return generateShift(level) + "Console.WriteLine( \"" + m_text + "\" );\n";
